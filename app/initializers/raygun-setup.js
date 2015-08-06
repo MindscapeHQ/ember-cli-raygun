@@ -3,8 +3,6 @@ import config from "../config/environment";
 
 export function initialize(container, application) {
 
-  debugger;
-
   if (!config.raygun) {
     console.log("Please set your Raygun config in environment.js");
     return;
@@ -12,7 +10,8 @@ export function initialize(container, application) {
 
   var loggingEnvironments = config.raygun.loggingEnvironments || ["production"];
 
-  if (loggingEnvironments.indexOf(config.environment) !== -1) {
+  if (loggingEnvironments.indexOf(config.environment) === -1) {
+    console.log("Skipping Raygun registration because loggingEnvironment=", loggingEnvironments, "and config.environment=", config.environment);
     return;
   }
 
