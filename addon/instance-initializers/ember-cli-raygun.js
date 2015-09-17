@@ -2,9 +2,9 @@
 
 import Ember from 'ember';
 
-export function initialize(container /*, application */) {
+export function initialize(instance /*, application */) {
 
-  let config       = container.lookupFactory("config:environment");
+  let config       = instance.container.lookupFactory("config:environment");
   let raygunConfig = config.raygun;
 
   if (!raygunConfig || !raygunConfig.apiKey) {
