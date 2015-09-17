@@ -11,7 +11,10 @@
     "start": "ember server",
     "test": "ember try:testall"
   },
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mindscapehq/ember-cli-raygun.git"
+  },
   "engines": {
     "node": ">= 0.10.0"
   },
@@ -41,7 +44,11 @@
     "ember-addon"
   ],
   "dependencies": {
-    "ember-cli-babel": "^5.1.3"
+    "ember-cli-babel": "^5.1.3",
+    "chalk": "1.1.0",
+    "ember-lodash": "0.0.3",
+    "fs-extra": "0.22.1",
+    "rsvp": "3.0.18"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"

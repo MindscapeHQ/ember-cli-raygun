@@ -1,5 +1,10 @@
 'use strict';
 
 module.exports = function(/* environment, appConfig */) {
-  return { };
+  return {
+    raygun: {
+      enabled: true,
+      apiKey: "SAMPLE_API_KEY"
+    }
+  };
 };
