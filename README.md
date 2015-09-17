@@ -16,13 +16,13 @@ Now set your Raygun API Key (available under "Application Settings" in your Rayg
 
 ```js
 // config/environment.js
-  var ENV = {
-    // ...
-    raygun: {
-      apiKey:  "YOUR-RAYGUN-API-KEY",
-      enabled: (environment === "production")
-    }
-    // ...
+var ENV = {
+  // ...
+  raygun: {
+    apiKey:  "YOUR-RAYGUN-API-KEY",
+    enabled: (environment === "production")
+  }
+  // ...
 ```
 
 Congratulations! You can now track and fix your errors once you deploy your app. (By default Ember CLI Raygun is disabled unless your environment is set to "production" - you can configure that behaviour in `config/environment.js`)
@@ -34,9 +34,12 @@ Check out the [Affected User Tracking](https://github.com/MindscapeHQ/raygun4js#
 You potentially want something like the following in your `application` route:
 
 ```js
+// app/routes/application.js
+// ...
   beforeModel: () {
     this.setRaygunUser();
   },
+
   setRaygunUser: () {
     // assuming you have a currentUser property available...
     Raygun.setUser(
@@ -46,7 +49,8 @@ You potentially want something like the following in your `application` route:
       this.get("user.fullName"),
       this.get("user.firstName"),
     );    
-  }
+  },
+// ...
 ```
 
 ### Contributing
