@@ -1,7 +1,7 @@
 {
   "name": "ember-cli-raygun",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "1.0.0-beta1",
+  "description": "A Raygun.io integration add on for Ember CLI",
   "directories": {
     "doc": "doc",
     "test": "tests"
@@ -15,7 +15,7 @@
   "engines": {
     "node": ">= 0.10.0"
   },
-  "author": "",
+  "author": "Nik Wakelin",
   "license": "MIT",
   "devDependencies": {
     "broccoli-asset-rev": "^2.1.2",
