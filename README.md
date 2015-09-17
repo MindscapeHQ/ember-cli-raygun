@@ -2,7 +2,7 @@
 
 This addon will allow you to report errors to [Raygun](https://raygun.io) from your Ember CLI app using [raygun4js](https://github.com/MindscapeHQ/raygun4js)
 
-**Note** This add on is currently in Beta! You may hit issues - please open an issue on Github if you have any problems! :heart:
+**Note:** This add on is currently in Beta! You may hit issues - please open an issue on Github if you have any problems! :heart:
 
 ## Installation
 
