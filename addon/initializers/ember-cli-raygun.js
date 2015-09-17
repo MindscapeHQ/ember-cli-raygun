@@ -34,9 +34,14 @@ export function initialize(container /*, application */) {
       Raygun.send(error);
     });
 
-    Ember.Logger.error = function(message, cause, stack) {
-      // This will send errors to Raygun in addition to console logging...
-      Raygun.send(new Error(message), null, { cause: cause, stack: stack });
+    let defaultErrorHandler = Ember.Logger.error;
+
+    Ember.Logger.error = function (message, cause, stack) {
+      defaultErrorHandler(message, cause, stack);
+      Raygun.send(new Error(message + " (" + cause + ")"), null, {
+        cause: cause,
+        stack: stack
+       });
     };
 
     if (!raygunConfig.beQuiet) {
