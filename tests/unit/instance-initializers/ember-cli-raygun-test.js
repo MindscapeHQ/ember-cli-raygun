@@ -1,7 +1,7 @@
 /* global Raygun */
 
 import Ember from 'ember';
-import { initializeWithConfig } from '../../../instance-initializers/ember-cli-raygun';
+import { initializeWithConfig } from '../../../initializers/ember-cli-raygun';
 import { module, test } from 'qunit';
 
 var container, application;
