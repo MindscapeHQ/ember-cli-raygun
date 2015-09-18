@@ -2,9 +2,8 @@
 
 import Ember from 'ember';
 
-export function initialize(instance /*, application */) {
+export default function(config) {
 
-  let config       = instance.container.lookupFactory("config:environment");
   let raygunConfig = config.raygun;
 
   if (!raygunConfig || !raygunConfig.apiKey) {
@@ -27,6 +26,7 @@ export function initialize(instance /*, application */) {
     Raygun.saveIfOffline(raygunConfig.offlineEnabled);
 
     Ember.onerror = function (error) {
+      console.info("Ember.onerror called");
       Raygun.send(error);
     };
 
@@ -55,8 +55,3 @@ export function initialize(instance /*, application */) {
   }
 
 }
-
-export default {
-  name: 'ember-cli-raygun',
-  initialize: initialize
-};

@@ -1,7 +1,7 @@
 /* global Raygun */
 
 import Ember from 'ember';
-import { initialize } from '../../../instance-initializers/ember-cli-raygun';
+import { initializeWithConfig } from '../../../instance-initializers/ember-cli-raygun';
 import { module, test } from 'qunit';
 
 var container, application;
@@ -20,11 +20,11 @@ test('should raise an error if there is no API Key', function(assert) {
   assert.expect(1);
 
   // empty config
-  container.register("config:environment", {});
+  let config = {};
 
   assert.throws(
      function() {
-       initialize({ container: container });
+       initializeWithConfig(config);
      },
      /Make sure you set your Raygun API Key/
    );
@@ -34,8 +34,7 @@ test('raygun is configured with an API key', function(assert) {
   assert.expect(2);
   let done = assert.async();
 
-  // empty config
-  container.register("config:environment", {
+  let config = {
     raygun: {
       apiKey: "abc123",
       enabled: true
@@ -43,7 +42,7 @@ test('raygun is configured with an API key', function(assert) {
     APP: {
       name: "testing!"
     }
-  });
+  };
 
   let oldInit = Raygun.init;
   Raygun.init = function(apiKey) {
@@ -57,7 +56,7 @@ test('raygun is configured with an API key', function(assert) {
     };
   };
 
-  initialize({ container: container });
+  initializeWithConfig(config);
 
   Raygun.init = oldInit;
 
@@ -68,7 +67,7 @@ test('Raygun is called if we log an error with ember', function(assert) {
   let done = assert.async();
 
   // empty config
-  container.register("config:environment", {
+  let config = {
     raygun: {
       apiKey: "abc123",
       enabled: true
@@ -76,16 +75,18 @@ test('Raygun is called if we log an error with ember', function(assert) {
     APP: {
       name: "testing!"
     }
-  });
+  };
 
-  let oldSend = Raygun.send;
+  let oldSend   = Raygun.send;
+
   Raygun.send = function(error) {
-    assert.equal(error.message, "Test Explosion! (Insanity in the membrane!)");
+    assert.equal(error.message, "Test Explosion!");
     done();
   };
 
-  Ember.Logger.error("Test Explosion!", "Insanity in the membrane!");
+  initializeWithConfig(config);
 
+  Ember.onerror(new Ember.Error("Test Explosion!"));
   Raygun.send = oldSend;
 
 });
