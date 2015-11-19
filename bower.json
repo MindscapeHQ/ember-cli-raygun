@@ -10,13 +10,9 @@
     "ember-resolver": "~0.1.20",
     "jquery": "^1.11.3",
     "loader.js": "ember-cli/loader.js#3.4.0",
-    "qunit": "~1.20.0",
-    "raygun4js": "~2.0.3"
-<<<<<<< f32d6d7dc5c84be7944dd8dcc76738379a8b4797
-=======
+    "qunit": "~1.20.0"
   },
   "devDependencies": {
     "raygun4js": "~2.0.3"
->>>>>>> updated raygun js and ember cli to current version
   }
 }
