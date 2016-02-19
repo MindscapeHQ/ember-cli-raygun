@@ -18,7 +18,7 @@ export default function(config) {
     };
 
     Raygun.init(raygunConfig.apiKey,
-                null,
+                raygunConfig.options,
                 Ember.merge(defaultCustomData, raygunConfig.customData)
                ).attach();
 
