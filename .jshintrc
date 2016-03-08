@@ -2,7 +2,9 @@
   "predef": [
     "document",
     "window",
-    "-Promise"
+    "-Promise",
+    "Raygun",
+    "rg4js"
   ],
   "browser": true,
   "boss": true,

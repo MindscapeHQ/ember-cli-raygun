@@ -1,6 +1,6 @@
 {
   "name": "ember-cli-raygun",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A Raygun.io integration add on for Ember CLI",
   "directories": {
     "doc": "doc",
@@ -46,9 +46,8 @@
     "error reporting"
   ],
   "dependencies": {
-    "ember-cli-babel": "^5.1.5",
     "chalk": "1.1.0",
-    "ember-lodash": "0.0.3",
+    "ember-cli-babel": "^5.1.5",
     "fs-extra": "0.22.1",
     "rsvp": "3.0.18"
   },

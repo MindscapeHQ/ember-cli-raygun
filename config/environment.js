@@ -4,7 +4,8 @@ module.exports = function(/* environment, appConfig */) {
   return {
     raygun: {
       enabled: true,
-      apiKey: "SAMPLE_API_KEY"
+      apiKey: "SAMPLE_API_KEY",
+      options: {}
     }
   };
 };
