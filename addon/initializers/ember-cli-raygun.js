@@ -17,8 +17,18 @@ export default function(config) {
       appName:     config.APP.name
     };
 
+    let initOptions = {};
+
+    if (raygunConfig.enablePulse) {
+      initOptions.disablePulse = false;
+    }
+
+    if (raygunConfig.disableCrashReporting) {
+      initOptions.disableErrorTracking = true;
+    }
+
     Raygun.init(raygunConfig.apiKey,
-                null,
+                initOptions,
                 Ember.merge(defaultCustomData, raygunConfig.customData)
                ).attach();
 
