@@ -24,7 +24,7 @@ module.exports = {
     var self = this,
       raygunApiKey = options.api_key || 'YOUR-RAYGUN-API-KEY';
 
-    return this.addBowerPackagesToProject([ { name: 'raygun4js', target: "^2.2.1"} ])
+    return this.addBowerPackagesToProject([ { name: 'raygun4js', target: "^2.3.4"} ])
     .then(function() {
       return self.setupRaygunConfig(raygunApiKey);
     })
