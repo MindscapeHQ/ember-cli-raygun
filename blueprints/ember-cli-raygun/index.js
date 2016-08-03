@@ -30,7 +30,7 @@ module.exports = {
     })
     .then(function () {
       var output = EOL;
-      output += chalk.blue('Raygun') + ' has been installed. Please set your API Key in ' + chalk.green('config/environment.js') + '. If you don\'t have a key, get one at https://raygun.io!' + EOL;
+      output += chalk.blue('Raygun') + ' has been installed. Please set your API Key in ' + chalk.green('config/environment.js') + '. If you don\'t have a key, get one at https://raygun.com!' + EOL;
       console.log(output);
     });
   },
