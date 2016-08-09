@@ -27,6 +27,10 @@ export default function(config) {
       initOptions.disableErrorTracking = true;
     }
 
+    if (raygunConfig.options) {
+      initOptions = Ember.merge(initOptions, raygunConfig.options);
+    }
+
     Raygun.init(raygunConfig.apiKey,
                 initOptions,
                 Ember.merge(defaultCustomData, raygunConfig.customData)
