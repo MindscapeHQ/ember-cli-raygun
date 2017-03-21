@@ -27,6 +27,8 @@ var ENV = {
   // ...
 ```
 
+The default blueprint (which runs during `ember install ember-cli-raygun`) will add the above config in your app's `config/environment.js` file.
+
 Congratulations! You can now track and fix your errors once you deploy your app. (By default Ember CLI Raygun is disabled unless your environment is set to "production" - you can configure that behaviour in `config/environment.js`)
 
 ### Affected User Tracking
