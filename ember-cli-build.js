@@ -5,13 +5,7 @@ const EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 module.exports = function(defaults) {
   let app = new EmberAddon(defaults, {
-    nodeAssets: {
-      'raygun4js': {
-        srcDir: 'dist',
-        destDir: 'raygun',
-        include: ['raygun.js'],
-      }
-    }
+    // Add options here
   });
 
   /*
