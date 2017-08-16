@@ -1,9 +1,9 @@
 {
-  "name": "ember-cli-raygun",
+  "name": "ember-try-placeholder",
   "dependencies": {
-    "ember": "~2.7.0",
-    "ember-cli-shims": "0.1.1",
-    "ember-qunit-notifications": "0.1.0",
-    "raygun4js": "^2.3.4"
+    "ember": "components/ember#lts-2-8"
+  },
+  "resolutions": {
+    "ember": "lts-2-8"
   }
 }

@@ -1,10 +1,17 @@
-/*jshint node:true*/
-/* global require, module */
-var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
+/* eslint-env node */
+'use strict';
+
+const EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
 
 module.exports = function(defaults) {
-  var app = new EmberAddon(defaults, {
-    // Add options here
+  let app = new EmberAddon(defaults, {
+    nodeAssets: {
+      'raygun4js': {
+        srcDir: 'dist',
+        destDir: 'raygun',
+        include: ['raygun.js'],
+      }
+    }
   });
 
   /*
