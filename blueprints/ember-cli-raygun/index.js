@@ -24,11 +24,8 @@ module.exports = {
     var self = this,
       raygunApiKey = options.api_key || 'YOUR-RAYGUN-API-KEY';
 
-    return this.addBowerPackagesToProject([ { name: 'raygun4js', target: "^2.3.4"} ])
-    .then(function() {
-      return self.setupRaygunConfig(raygunApiKey);
-    })
-    .then(function () {
+
+    return self.setupRaygunConfig(raygunApiKey).then(function () {
       var output = EOL;
       output += chalk.blue('Raygun') + ' has been installed. Please set your API Key in ' + chalk.green('config/environment.js') + '. If you don\'t have a key, get one at https://raygun.com!' + EOL;
       console.log(output);
