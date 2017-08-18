@@ -14,6 +14,12 @@ It's as easy as:
 $ ember install ember-cli-raygun
 ```
 
+Optionally you can pass Raygun API Key:
+
+```bash
+$ ember install ember-cli-raygun --api_key='YOUR-RAYGUN-API-KEY'
+```
+
 Now set your Raygun API Key (available under "Application Settings" in your Raygun Account) in `config/environment.js`
 
 ```js
