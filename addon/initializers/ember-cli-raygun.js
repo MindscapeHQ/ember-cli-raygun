@@ -40,6 +40,7 @@ export default function(config) {
     Raygun.saveIfOffline(raygunConfig.offlineEnabled);
 
     Ember.onerror = function (error) {
+      // eslint-disable-next-line no-console
       console.info("Ember.onerror called");
       Raygun.send(error);
     };

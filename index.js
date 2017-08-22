@@ -1,17 +1,29 @@
-/* jshint node: true */
+/* eslint-env node */
 'use strict';
 
-var path = require('path');
+const path = require('path');
 
 module.exports = {
   name: 'ember-cli-raygun',
 
-  blueprintsPath: function() {
+  options: {
+    nodeAssets: {
+      'raygun4js': {
+        vendor: {
+          srcDir: 'dist',
+          destDir: 'raygun',
+          include: ['raygun.js'],
+        }
+      }
+    }
+  },
+
+  blueprintsPath() {
     return path.join(__dirname, 'blueprints');
   },
 
-  included: function(app) {
+  included(app) {
     this._super.included(app);
-    this.app.import(app.bowerDirectory + '/raygun4js/dist/raygun.js');
+    app.import('vendor/raygun/raygun.js');
   }
 };

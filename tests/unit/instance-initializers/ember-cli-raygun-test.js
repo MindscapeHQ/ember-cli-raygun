@@ -4,13 +4,12 @@ import Ember from 'ember';
 import { initializeWithConfig } from '../../../initializers/ember-cli-raygun';
 import { module, test } from 'qunit';
 
-var container, application;
+let application;
 
 module('Unit | Initializer | ember cli raygun', {
   beforeEach: function() {
     Ember.run(function() {
       application = Ember.Application.create();
-      container   = application.registry;
       application.deferReadiness();
     });
   }
@@ -122,5 +121,5 @@ test('Additional options can be passed into raygun', function(assert) {
 
   initializeWithConfig(config);
 
-  Raygun.init = oldInit; 
+  Raygun.init = oldInit;
 });
