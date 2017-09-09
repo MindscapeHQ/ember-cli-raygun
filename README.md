@@ -69,7 +69,6 @@ Pull requests are welcome!
 
 * `git clone` this repository
 * `npm install`
-* `bower install`
 
 ### Running tests
 
