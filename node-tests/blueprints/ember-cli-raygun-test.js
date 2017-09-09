@@ -1,7 +1,7 @@
 /* eslint-env node */
+/* eslint-env mocha */
 'use strict';
 
-var EOL = require('os').EOL;
 const blueprintHelpers = require('ember-cli-blueprint-test-helpers/helpers');
 const file = require('ember-cli-blueprint-test-helpers/chai').file;
 const expect = require('ember-cli-blueprint-test-helpers/chai').expect;
@@ -14,7 +14,7 @@ const emberGenerate = blueprintHelpers.emberGenerate;
 describe('Acceptance: ember generate ember-cli-raygun', function() {
   setupTestHooks(this);
 
-  it('ember-cli-raygun with api key passed in', function() {
+  it('ember-cli-raygun with api key passed in', () => {
     let args = ['ember-cli-raygun', '--api_key=FACEYFACEFACE'];
 
 
@@ -28,9 +28,8 @@ describe('Acceptance: ember generate ember-cli-raygun', function() {
     },`))
     });
 
-  it('ember-cli-raygun without api key', function() {
+  it('ember-cli-raygun without api key', () => {
     let args = ['ember-cli-raygun'];
-
 
   // pass any additional command line options in the arguments array
   return emberNew()
