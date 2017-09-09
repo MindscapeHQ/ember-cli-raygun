@@ -25,7 +25,6 @@
     "nodetest": "mocha node-tests --recursive"
   },
   "dependencies": {
-    "bower": "^1.8.0",
     "chalk": "^2.1.0",
     "ember-cli-babel": "^6.8.2",
     "ember-lodash": "^4.17.5",
