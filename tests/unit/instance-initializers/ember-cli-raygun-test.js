@@ -1,6 +1,9 @@
 /* global Raygun */
 
 import Ember from 'ember';
+import { run } from '@ember/runloop';
+import Application from '@ember/application';
+import EmberError from '@ember/error';
 import { initializeWithConfig } from '../../../initializers/ember-cli-raygun';
 import { module, test } from 'qunit';
 
@@ -8,8 +11,8 @@ let application;
 
 module('Unit | Initializer | ember cli raygun', {
   beforeEach: function() {
-    Ember.run(function() {
-      application = Ember.Application.create();
+    run(function() {
+      application = Application.create();
       application.deferReadiness();
     });
   }
@@ -22,11 +25,11 @@ test('should raise an error if there is no API Key', function(assert) {
   let config = {};
 
   assert.throws(
-     function() {
-       initializeWithConfig(config);
-     },
-     /Make sure you set your Raygun API Key/
-   );
+    function() {
+      initializeWithConfig(config);
+    },
+    /Make sure you set your Raygun API Key/
+  );
 });
 
 test('raygun is configured with an API key', function(assert) {
@@ -76,7 +79,7 @@ test('Raygun is called if we log an error with ember', function(assert) {
     }
   };
 
-  let oldSend   = Raygun.send;
+  let oldSend = Raygun.send;
 
   Raygun.send = function(error) {
     assert.equal(error.message, "Test Explosion!");
@@ -85,7 +88,7 @@ test('Raygun is called if we log an error with ember', function(assert) {
 
   initializeWithConfig(config);
 
-  Ember.onerror(new Ember.Error("Test Explosion!"));
+  Ember.onerror(new EmberError("Test Explosion!"));
   Raygun.send = oldSend;
 
 });

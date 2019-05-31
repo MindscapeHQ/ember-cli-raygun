@@ -1,13 +1,15 @@
 /* global Raygun */
 
-import Ember from 'ember';
+import Ember from 'ember'
+import { assert } from '@ember/debug';
+import { assign } from '@ember/polyfills';
+import { on } from 'rsvp';
 
 export default function(config) {
-
   let raygunConfig = config.raygun;
 
   if (!raygunConfig || !raygunConfig.apiKey) {
-    Ember.assert("Make sure you set your Raygun API Key in config/environment.js!");
+    assert("Make sure you set your Raygun API Key in config/environment.js!");
   }
 
   if (raygunConfig.enabled) {
@@ -28,13 +30,14 @@ export default function(config) {
     }
 
     if (raygunConfig.options) {
-      initOptions = Ember.merge(initOptions, raygunConfig.options);
+      initOptions = assign(initOptions, raygunConfig.options);
     }
 
-    Raygun.init(raygunConfig.apiKey,
-                initOptions,
-                Ember.merge(defaultCustomData, raygunConfig.customData)
-               ).attach();
+    Raygun.init(
+      raygunConfig.apiKey,
+      initOptions,
+      assign(defaultCustomData, raygunConfig.customData)
+    ).attach();
 
     Raygun.setVersion(config.APP.version);
     Raygun.saveIfOffline(raygunConfig.offlineEnabled);
@@ -45,7 +48,7 @@ export default function(config) {
       Raygun.send(error);
     };
 
-    Ember.RSVP.on('error', function (error) {
+    on('error', function (error) {
       Raygun.send(error);
     });
 
@@ -56,17 +59,18 @@ export default function(config) {
       Raygun.send(new Error(message + " (" + cause + ")"), null, {
         cause: cause,
         stack: stack
-       });
+      });
     };
 
     if (!raygunConfig.beQuiet) {
-      Ember.Logger.info("Ember CLI Raygun Enabled and ready to report!");
+      // eslint-disable-next-line no-console
+      console.info("Ember CLI Raygun Enabled and ready to report!");
     }
 
   } else {
     if (!raygunConfig.beQuiet) {
-      Ember.Logger.info("FYI: Ember CLI Raygun is currently disabled, as config.raygun.enabled is false");
+      // eslint-disable-next-line no-console
+      console.info("FYI: Ember CLI Raygun is currently disabled, as config.raygun.enabled is false");
     }
   }
-
 }

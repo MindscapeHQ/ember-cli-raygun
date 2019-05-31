@@ -6,8 +6,6 @@ This addon will allow you to report errors to [Raygun](https://raygun.io) from y
 
 **Note:** This add on is currently in Beta! You may hit issues - please open an issue on Github if you have any problems! :heart:
 
-## Installation
-
 It's as easy as:
 
 ```bash
