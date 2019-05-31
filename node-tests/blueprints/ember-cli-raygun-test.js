@@ -1,7 +1,7 @@
 /* eslint-env node */
+/* global describe, it */
 'use strict';
 
-var EOL = require('os').EOL;
 const blueprintHelpers = require('ember-cli-blueprint-test-helpers/helpers');
 const file = require('ember-cli-blueprint-test-helpers/chai').file;
 const expect = require('ember-cli-blueprint-test-helpers/chai').expect;
