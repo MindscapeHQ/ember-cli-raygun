@@ -62,7 +62,7 @@
     "eslint-plugin-ember": "^6.2.0",
     "eslint-plugin-node": "^9.0.1",
     "loader.js": "^4.7.0",
-    "mocha": "^2.5.3",
+    "mocha": "6.1.4",
     "qunit-dom": "^0.8.4"
   },
   "engines": {
