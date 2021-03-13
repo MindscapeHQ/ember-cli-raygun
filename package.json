@@ -1,7 +1,7 @@
 {
   "name": "ember-cli-raygun",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "2.0.0.beta",
+  "description": "A Raygun.com integration add on for Ember CLI",
   "keywords": [
     "ember-addon"
   ],
@@ -23,8 +23,10 @@
     "test:ember-compatibility": "ember try:each"
   },
   "dependencies": {
+    "@embroider/macros": "^0.37.0",
     "ember-cli-babel": "^7.21.0",
-    "ember-cli-htmlbars": "^5.2.0"
+    "ember-cli-htmlbars": "^5.2.0",
+    "raygun4js": "^2.22.0"
   },
   "devDependencies": {
     "@ember/optional-features": "^1.3.0",

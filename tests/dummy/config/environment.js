@@ -23,6 +23,11 @@ module.exports = function(environment) {
     }
   };
 
+  ENV.raygun = {
+    enableCrashReporting: true, // usually this will be something like: (environment === 'production')
+    apiKey: 'YOUR_API_KEY_HERE'
+  }
+
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
