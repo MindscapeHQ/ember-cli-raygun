@@ -3,11 +3,17 @@
   "version": "2.0.0.beta",
   "description": "A Raygun.com integration add on for Ember CLI",
   "keywords": [
-    "ember-addon"
+    "ember-addon",
+    "raygun",
+    "error tracking",
+    "error reporting"
   ],
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mindscapehq/ember-cli-raygun.git"
+  },
   "license": "MIT",
-  "author": "",
+  "author": "Nik Wakelin",
   "directories": {
     "doc": "doc",
     "test": "tests"
