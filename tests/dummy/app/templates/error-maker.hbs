@@ -1,3 +1,17 @@
+<p>
+  <h5>User identity</h5>
+  <label>ID</label>
+  <Input @type="id" @value={{this.userId}} />
+  <label>Email</label>
+  <Input @type="email" @value={{this.userEmail}} />
+  <label>Name</label>
+  <Input @type="name" @value={{this.userName}} />
+
+  <pre>{{this.userData}}</pre>
+</p>
+
+<br /><hr /><br />
+
 <button {{on "click" this.regularError}}>
   Regular ol' error
 </button>

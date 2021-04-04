@@ -4,20 +4,42 @@ import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 import { Promise } from 'rsvp';
 import EmberError from '@ember/error';
+import { inject as service } from '@ember/service';
 
 export default class ErrorMakerController extends Controller {
 
+  @service raygun;
+
   @tracked raygunEvents = []
+
+  @tracked userId
+  @tracked userEmail
+  @tracked userName
 
   init() {
     super.init(...arguments)
 
     rg4js('onBeforeSend', (payload) => {
       this.raygunEvents = [ JSON.stringify(payload), ...this.raygunEvents ]
-      return false; // don't actually try to connect
-      // return payload; // use this to actually send if you want to test with a live API key
-    });    
+
+      // If you're sing the default/test api key - don't actually send to Raygun :)
+      return false;
+      // use this to actually send if you want to test with a live API key
+      // return payload;
+    });
   }
+
+  get userData() {
+    if (!this.userId) return "(Choose an ID to set Raygun user data)";
+
+    let data = {
+      identifier: this.userId,
+      email: this.userEmail,
+      fullName: this.userName
+    }
+    this.raygun.setUser(data);
+    return JSON.stringify(data);
+  } 
 
   @action
   regularError() {
