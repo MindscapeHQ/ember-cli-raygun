@@ -4,7 +4,15 @@
 
 This addon will allow you to report errors to [Raygun](https://raygun.io) from your Ember CLI app using [raygun4js](https://github.com/MindscapeHQ/raygun4js)
 
-**Note:** This add on is currently in Beta! You may hit issues - please open an issue on Github if you have any problems! :heart:
+**Ember Octane Upgrade**
+
+This Add-On has recently been rewritten in order to be compatible with the latest Ember versions.
+
+The most recent stable version is [1.3.0](https://github.com/MindscapeHQ/ember-cli-raygun/tree/1.3.0), and you can see the previous code in the [`pre-octane`](https://github.com/MindscapeHQ/ember-cli-raygun/tree/pre-octane) branch
+
+:heart: Please [open an issue](https://github.com/MindscapeHQ/ember-cli-raygun/issues/new) if you run into any troubles, thanks for testing!
+
+## Installation
 
 It's as easy as:
 
@@ -35,7 +43,7 @@ The default blueprint (which runs during `ember install ember-cli-raygun`) will 
 
 Congratulations! You can now track and fix your errors once you deploy your app. (By default Ember CLI Raygun is disabled unless your environment is set to "production" - you can configure that behaviour in `config/environment.js`)
 
-### CORS
+## CORS
 
 `ember-cli-raygun` will automatically inject the [raygun4js](https://github.com/MindscapeHQ/raygun4js) bootstrap script into the head of your Ember app. This is the most reliable way to catch errors (even during app initialization).
 
@@ -70,7 +78,7 @@ export default class IndexRoute extends Route {
 }
 ```
 
-### Affected User Tracking
+## Affected User Tracking
 
 Check out the [Affected User Tracking](https://github.com/MindscapeHQ/raygun4js#affected-user-tracking) section in the raygun4js documentation for full details.
 
@@ -99,7 +107,7 @@ You potentially want something like the following in your `application` route:
 // ...
 ```
 
-### Thanks! :heart:
+## Thanks! :heart:
 
 Thanks to:
 
@@ -117,15 +125,16 @@ Thanks to:
 
 For your contributions on the previous version of this addon :) 
 
-### Contributing
+## Contributing
 
 Pull requests are welcome!
 
 * `git clone` this repository
-* `npm install`
-* `bower install`
+* `yarn install`
 
-### Running tests
+## Running tests
 
 * `ember test` OR
 * `ember test --server`
+
+There’s a detailed test harness in the `dummy` app so please check that your changes work end-to-end by running that.
