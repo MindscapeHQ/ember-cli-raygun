@@ -68,7 +68,7 @@ export default class IndexRoute extends Route {
   @service raygun;
 
   beforeModel() {
-    this.get('raygun').trackEvent({
+    this.raygun.trackEvent({
       type: 'customTiming',
       name: 'IndexRouteBeforeModel',
       duration: 1200
@@ -96,7 +96,7 @@ You potentially want something like the following in your `application` route:
   },
 
   setRaygunUser: () {
-    this.get("raygun").setUser({
+    this.raygun.setUser({
       identifier: this.get("user.id"),
       isAnonymous: false,
       email: this.get("user.email"),
