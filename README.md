@@ -2,46 +2,49 @@
 [![Build Status](https://travis-ci.org/MindscapeHQ/ember-cli-raygun.svg?branch=master)](https://travis-ci.org/MindscapeHQ/ember-cli-raygun)
 [![Ember Observer Score](http://emberobserver.com/badges/ember-cli-raygun.svg)](http://emberobserver.com/addons/ember-cli-raygun)
 
-This addon will allow you to report errors to [Raygun](https://raygun.io) from your Ember CLI app using [raygun4js](https://github.com/MindscapeHQ/raygun4js)
+This addon will allow you to report errors to [Raygun](https://raygun.com) from your Ember CLI app using [raygun4js](https://github.com/MindscapeHQ/raygun4js).
 
-**Ember Octane Upgrade**
+# Legacy Provider Notice
 
-This Add-On has recently been rewritten in order to be compatible with the latest Ember versions.
+There is a known issue that prevents this provider from working with Ember.js versions greater than 3.1, see [deprecation of Ember.Logger](https://rfcs.emberjs.com/id/0297-deprecate-ember-logger).
 
-The most recent stable version is [1.3.0](https://github.com/MindscapeHQ/ember-cli-raygun/tree/1.3.0), and you can see the previous code in the [`pre-octane`](https://github.com/MindscapeHQ/ember-cli-raygun/tree/pre-octane) branch
+An update is planned. In the meantime, a workaround can be made by adding a `Logger` object back into Ember which delegates to the equivalent `console` methods.
 
 :heart: Please [open an issue](https://github.com/MindscapeHQ/ember-cli-raygun/issues/new) if you run into any troubles, thanks for testing!
 
-## Installation
+---
 
-It's as easy as:
+## CLI installation
+
+```bash
+$ ember install ember-cli-raygun --api_key='paste_your_api_key_here'
+```
+
+Alternatively, you can set your API key manually by starting with:
 
 ```bash
 $ ember install ember-cli-raygun
 ```
 
-Optionally you can pass your Raygun API Key:
-
-```bash
-$ ember install ember-cli-raygun --api_key='YOUR-RAYGUN-API-KEY'
-```
-
-Otherwise, you’ll need to set your Raygun API Key (available under "Application Settings" in your Raygun Account) in `config/environment.js`
+Next, set your API key in `config/environment.js`:
 
 ```js
-// config/environment.js
 var ENV = {
   // ...
   raygun: {
-    apiKey:  "YOUR-RAYGUN-API-KEY",
+    apiKey:  "paste_your_api_key_here",
     enableCrashReporting: (environment === "production")
   }
   // ...
 ```
 
-The default blueprint (which runs during `ember install ember-cli-raygun`) will add the above config in your app's `config/environment.js` file.
+*The default blueprint (which runs during ember install ember-cli-raygun) will add the above config in your app's config/environment.js file.*
 
-Congratulations! You can now track and fix your errors once you deploy your app. (By default Ember CLI Raygun is disabled unless your environment is set to "production" - you can configure that behaviour in `config/environment.js`)
+## Release
+
+Raygun will now track errors in your deployed application. By default, Ember CLI Raygun is disabled unless your environment is set to "production". You can configure this behavior in `config/environment.js`.
+
+# Additional Configruation
 
 ## CORS
 
@@ -58,7 +61,7 @@ If you’re using CORS without `unsafe-inline`, you’ll need to add the followi
 
 ### Accessing Raygun
 
-Functions you might need on rg4js are exposed as an [Ember Service](https://guides.emberjs.com/release/tutorial/part-2/service-injection/), for instance tracking custom events:
+Functions you might need on `rg4js` are exposed as an [Ember Service](https://guides.emberjs.com/release/tutorial/part-2/service-injection/), for instance tracking custom events:
 
 ```js
 import Route from '@ember/routing/route';
@@ -74,20 +77,17 @@ export default class IndexRoute extends Route {
       duration: 1200
     })
   }
-
 }
 ```
 
-## Affected User Tracking
+## User Tracking
 
-Check out the [Affected User Tracking](https://github.com/MindscapeHQ/raygun4js#affected-user-tracking) section in the raygun4js documentation for full details.
+Check out the [Customers](https://github.com/MindscapeHQ/raygun4js#customers) section in the raygun4js documentation for full details.
 
-You potentially want something like the following in your `application` route:
+Add the following snippet into your application route in `app/routes/application.js`:
 
 ```js
-// app/routes/application.js
 // ...
-
   @service user;
   @service raygun;
 
