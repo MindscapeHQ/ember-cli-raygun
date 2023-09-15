@@ -1,76 +1,104 @@
-import Application from '@ember/application';
-
-import { initialize } from 'dummy/instance-initializers/raygun';
 import { module, test } from 'qunit';
-import { run } from '@ember/runloop';
+import { setupApplicationTest } from 'ember-qunit';
 import Service from '@ember/service';
-import { getOwnConfig } from '@embroider/macros';
+import { initialize } from 'ember-cli-raygun/instance-initializers/raygun';
 
-class MockRaygunService extends Service { }
+class MockRaygunService extends Service {
+  options = {};
+  _apiKey = null;
+  _enableCrashReporting = false;
+  _enablePulse = false;
 
-module('Unit | Instance Initializer | Raygun', function(hooks) {
-  hooks.beforeEach(function() {
-    this.defaultRaygunConfig = { ...getOwnConfig().raygunConfig }
-    
-    this.TestApplication = Application.extend();
-    this.TestApplication.instanceInitializer({
-      name: 'initializer under test',
-      initialize
-    });
-    this.application = this.TestApplication.create({ autoboot: false });
-    this.instance = this.application.buildInstance();
+  get apiKey() {
+    return this._apiKey;
+  }
 
-    this.instance.register('service:raygun', MockRaygunService);
-  });
-  hooks.afterEach(function() {
-    getOwnConfig().raygunConfig = this.defaultRaygunConfig;
+  set apiKey(newKey) {
+    this._apiKey = newKey;
+  }
 
-    run(this.instance, 'destroy');
-    run(this.application, 'destroy');
-  });
+  set enableCrashReporting(value) {
+    this._enableCrashReporting = value;
+  }
 
-  test('sets API key', async function(assert) {
-    await this.instance.boot();
-    const raygunService = this.instance.lookup("service:raygun");
+  get enableCrashReporting() {
+    return this._enableCrashReporting;
+  }
 
-    assert.equal("YOUR_API_KEY_HERE", raygunService.apiKey);
-  });
+  set enablePulse(value) {
+    this._enablePulse = value;
+  }
 
-  test('enables crash reporting', async function (assert) {
-    await this.instance.boot();
-    const raygunService = this.instance.lookup("service:raygun");
+  get enablePulse() {
+    return this._enablePulse;
+  }
+}
 
-    assert.equal(true, raygunService.enableCrashReporting);
-  });
+module('Acceptance | Raygun instance initializer', function (hooks) {
+  setupApplicationTest(hooks);
 
-  test('enables pulse', async function (assert) {
-    await this.instance.boot();
-    const raygunService = this.instance.lookup("service:raygun");
-
-    assert.equal(true, raygunService.enablePulse);
+  hooks.beforeEach(function () {
+    this.owner.register('service:raygun', MockRaygunService);
+    const envConfig = this.owner.resolveRegistration('config:environment');
+    envConfig.raygunConfig = envConfig.raygunConfig || {};
+    this.defaultRaygunConfig = { ...envConfig.raygunConfig };
   });
 
-  test('does nothing if crash reporting is disabled', async function (assert) {
-    let config = getOwnConfig().raygunConfig;
-    config.enableCrashReporting = false;
+  hooks.afterEach(function () {
+    const envConfig = this.owner.resolveRegistration('config:environment');
+    envConfig.raygunConfig = this.defaultRaygunConfig;
+  });
 
-    await this.instance.boot();
-    const raygunService = this.instance.lookup("service:raygun");
+  test('sets API key', function (assert) {
+    const envConfig = this.owner.resolveRegistration('config:environment');
+    envConfig.raygunConfig.apiKey = "YOUR_API_KEY_HERE";
+    initialize(this.owner);
 
-    assert.notOk(raygunService.enableCrashReporting);
-    assert.equal(undefined, raygunService.apiKey);
-  })
+    const raygunService = this.owner.lookup('service:raygun');
+    assert.equal("YOUR_API_KEY_HERE", raygunService.apiKey, 'API key should match');
+  });
 
-  test('allows passing options', async function (assert) {
-    let config = getOwnConfig().raygunConfig;
-    config.options = {
-      testOption: true
-    }
+  test('enables crash reporting', function (assert) {
+    const envConfig = this.owner.resolveRegistration('config:environment');
+    envConfig.raygunConfig.apiKey = "YOUR_API_KEY_HERE";
+    envConfig.raygunConfig.enableCrashReporting = true;
+    initialize(this.owner);
 
-    await this.instance.boot();
-    const raygunService = this.instance.lookup("service:raygun");
+    const raygunService = this.owner.lookup('service:raygun');
+    assert.equal(true, raygunService.enableCrashReporting, 'Crash reporting should be enabled');
+  });
 
-    assert.ok(raygunService.options.testOption);
-  })
+  test('enables pulse', function (assert) {
+    const envConfig = this.owner.resolveRegistration('config:environment');
+    envConfig.raygunConfig.apiKey = "YOUR_API_KEY_HERE";
+    envConfig.raygunConfig.enableCrashReporting = true;
+    initialize(this.owner);
+
+    const raygunService = this.owner.lookup('service:raygun');
+    assert.equal(true, raygunService.enablePulse, 'Pulse should be enabled');
+  });
+
+  test('does nothing if crash reporting is disabled', function (assert) {
+    const envConfig = this.owner.resolveRegistration('config:environment');
+    envConfig.raygunConfig.apiKey = "YOUR_API_KEY_HERE";
+    envConfig.raygunConfig.enableCrashReporting = false;
+    initialize(this.owner);
+
+    const raygunService = this.owner.lookup('service:raygun');
+    assert.notOk(raygunService.enableCrashReporting, 'Crash reporting should be disabled');
+    assert.notOk(raygunService.enablePulse, 'Pulse should be disabled');
+    assert.equal(null, raygunService.apiKey, 'API key should be null');
+  });
+
+  test('allows passing options', function (assert) {
+    const envConfig = this.owner.resolveRegistration('config:environment');
+    envConfig.raygunConfig.options = { testOption: true };
+    envConfig.raygunConfig.apiKey = "YOUR_API_KEY_HERE";
+    envConfig.raygunConfig.enableCrashReporting = true;
+    initialize(this.owner);
+
+    const raygunService = this.owner.lookup('service:raygun');
+    assert.ok(raygunService.options.testOption, 'Test option should be true');
+  });
 
 });
