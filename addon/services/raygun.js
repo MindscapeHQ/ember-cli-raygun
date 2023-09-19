@@ -20,12 +20,22 @@ export default class RaygunService extends Service {
     rg4js('apiKey', newKey)
   }
 
+  get enableCrashReporting() {
+    return this._enableCrashReporting;
+  }
+
   set enableCrashReporting(value) {
-    rg4js('enableCrashReporting', value)
+    rg4js('enableCrashReporting', value);
+    this._enableCrashReporting = value;
+  }
+
+  get enablePulse() {
+    return this._enablePulse;
   }
 
   set enablePulse(value) {
-    rg4js('enablePulse', value)
+    rg4js('enablePulse', value);
+    this._enablePulse = value;
   }
 
   send() {
