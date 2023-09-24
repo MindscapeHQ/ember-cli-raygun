@@ -4,13 +4,7 @@
 
 This addon will allow you to report errors to [Raygun](https://raygun.com) from your Ember CLI app using [raygun4js](https://github.com/MindscapeHQ/raygun4js).
 
-# Legacy Provider Notice
-
-There is a known issue that prevents this provider from working with Ember.js versions greater than 3.1, see [deprecation of Ember.Logger](https://rfcs.emberjs.com/id/0297-deprecate-ember-logger).
-
-An update is planned. In the meantime, a workaround can be made by adding a `Logger` object back into Ember which delegates to the equivalent `console` methods.
-
-:heart: Please [open an issue](https://github.com/MindscapeHQ/ember-cli-raygun/issues/new) if you run into any troubles, thanks for testing!
+:heart: Please [open an issue](https://github.com/MindscapeHQ/ember-cli-raygun/issues/new) if you run into any troubles!
 
 ---
 
@@ -130,7 +124,7 @@ For your contributions on the previous version of this addon :)
 Pull requests are welcome!
 
 * `git clone` this repository
-* `yarn install`
+* `npm install`
 
 ## Running tests
 

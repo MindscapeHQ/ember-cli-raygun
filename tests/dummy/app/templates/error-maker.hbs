@@ -12,32 +12,32 @@
 
 <br /><hr /><br />
 
-<button {{on "click" this.regularError}}>
+<button type="button" {{on "click" this.regularError}}>
   Regular ol' error
 </button>
 
-<button {{on "click" this.emberError}}>
+<button type="button" {{on "click" this.emberError}}>
   Ember error
 </button>
 
-<button {{on "click" this.uncaughtPromise}}>
+<button type="button" {{on "click" this.uncaughtPromise}}>
   Uncaught promise rejection
 </button>
 
-<button {{on "click" this.manualReport}} class="manual-report">
+<button type="button" {{on "click" this.manualReport}} class="manual-report">
   Manually Report
 </button>
 
-{{link-to "Another route" "other-one"}}
+<LinkTo @route="other-one">Another route</LinkTo>
 
 <h5>What have we sent to Raygun?</h5>
-{{#if raygunEvents}}
-  {{#each raygunEvents as |e| }}
+{{#if this.raygunEvents}}
+  {{#each this.raygunEvents as |e| }}
     <pre>{{ e }}</pre>
     <hr />
   {{/each}}
 
-  Sent to Raygun: <span class="event-count">{{raygunEvents.length}}</span>
+  Sent to Raygun: <span class="event-count">{{this.raygunEvents.length}}</span>
 {{else}}
   Nothing yet...
 {{/if}}

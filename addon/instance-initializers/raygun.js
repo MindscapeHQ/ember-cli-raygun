@@ -1,6 +1,5 @@
 import RSVP from 'rsvp';
 import { getOwnConfig } from '@embroider/macros';
-import Ember from 'ember';
 
 export function initialize(applicationInstance) {
   const raygunConfig = getOwnConfig().raygunConfig;
@@ -26,8 +25,8 @@ export function initialize(applicationInstance) {
     });
   });
 
-  const existingOnError = Ember.onerror;
-  Ember.onerror = function (error) {
+  const existingOnError = applicationInstance.onerror;
+  applicationInstance.onerror = function (error) {
     if (existingOnError) existingOnError(error);
     raygunService.send(error);
   };
