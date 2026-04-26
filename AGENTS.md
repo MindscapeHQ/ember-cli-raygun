@@ -177,7 +177,9 @@ npm run lint:js
 npm run lint:hbs
 ```
 
-CI runs on Travis (`.travis.yml`).
+CI runs on GitHub Actions (`.github/workflows/ci.yml`) — runs lint,
+build, tests, and the ember-try compatibility matrix on every PR and
+on pushes to `main`.
 
 ---
 
@@ -254,10 +256,12 @@ them or at least don't regress them.
 
 ## 9. Release / publishing
 
-This is a public npm package. Publishing is **not** automated in this
-repo — do not run `npm publish` from an agent without explicit user
-confirmation. Version bumps go in `package.json`. Update the README
-"thanks" section and any breaking-change notes.
+This is a public npm package distributed via
+<https://www.npmjs.com/package/ember-cli-raygun>. The full release
+procedure is documented in [`RELEASING.md`](./RELEASING.md).
+
+Publishing is **not** automated — do not run `npm publish` or
+`npm version` from an agent without explicit user confirmation.
 
 ---
 

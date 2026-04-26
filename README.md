@@ -1,5 +1,5 @@
 # Ember CLI Raygun
-[![Build Status](https://travis-ci.org/MindscapeHQ/ember-cli-raygun.svg?branch=master)](https://travis-ci.org/MindscapeHQ/ember-cli-raygun)
+[![CI](https://github.com/MindscapeHQ/ember-cli-raygun/actions/workflows/ci.yml/badge.svg)](https://github.com/MindscapeHQ/ember-cli-raygun/actions/workflows/ci.yml)
 [![Ember Observer Score](http://emberobserver.com/badges/ember-cli-raygun.svg)](http://emberobserver.com/addons/ember-cli-raygun)
 
 This addon will allow you to report errors to [Raygun](https://raygun.com) from your Ember CLI app using [raygun4js](https://github.com/MindscapeHQ/raygun4js).
