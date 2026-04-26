@@ -65,7 +65,6 @@ jobs:
           - ember-lts-4.4.5
           - ember-lts-4.8.6
           - ember-lts-4.12.3
-          - ember-default-with-jquery
         include:
           # Allow these to fail without failing the workflow.
           # ember-release is included here (rather than as a hard requirement)
