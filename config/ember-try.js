@@ -53,34 +53,13 @@ module.exports = async function () {
           }
         }
       },
-      {
-        name: 'ember-default-with-jquery',
-        env: {
-          EMBER_OPTIONAL_FEATURES: JSON.stringify({
-            'jquery-integration': true
-          })
-        },
-        npm: {
-          devDependencies: {
-            '@ember/jquery': '^1.1.0'
-          }
-        }
-      },
-      {
-        name: 'ember-classic',
-        env: {
-          EMBER_OPTIONAL_FEATURES: JSON.stringify({
-            'application-template-wrapper': true,
-            'default-async-observers': false,
-            'template-only-glimmer-components': false
-          })
-        },
-        npm: {
-          ember: {
-            edition: 'classic'
-          }
-        }
-      }
+      // The 'ember-classic' scenario was removed: the Ember Classic edition
+      // was removed from Ember itself, so the scenario can never pass on a
+      // modern Ember version. See deprecations.emberjs.com/v3.x/#toc_editions-classic
+      //
+      // The 'ember-default-with-jquery' scenario was also removed: the
+      // 'jquery-integration' optional feature was removed in Ember 4.0.
+      // See deprecations.emberjs.com/v3.x/#toc_optional-feature-jquery-integration
     ]
   };
 };

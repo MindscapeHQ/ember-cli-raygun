@@ -13,13 +13,15 @@
 /.eslintignore
 /.eslintrc.js
 /.git/
+/.github/
 /.gitignore
 /.template-lintrc.js
-/.travis.yml
 /.watchmanconfig
 /bower.json
 /config/ember-try.js
 /CONTRIBUTING.md
+/AGENTS.md
+/RELEASING.md
 /ember-cli-build.js
 /testem.js
 /tests/
