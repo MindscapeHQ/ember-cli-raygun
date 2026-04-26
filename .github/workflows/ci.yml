@@ -65,11 +65,14 @@ jobs:
           - ember-lts-4.4.5
           - ember-lts-4.8.6
           - ember-lts-4.12.3
-          - ember-release
           - ember-default-with-jquery
-          - ember-classic
         include:
           # Allow these to fail without failing the workflow.
+          # ember-release is included here (rather than as a hard requirement)
+          # because the addon is currently pinned to the Ember 4.12 line; the
+          # Ember 5/6 jump is tracked separately.
+          - scenario: ember-release
+            allow-failure: true
           - scenario: ember-beta
             allow-failure: true
           - scenario: ember-canary

@@ -65,22 +65,10 @@ module.exports = async function () {
             '@ember/jquery': '^1.1.0'
           }
         }
-      },
-      {
-        name: 'ember-classic',
-        env: {
-          EMBER_OPTIONAL_FEATURES: JSON.stringify({
-            'application-template-wrapper': true,
-            'default-async-observers': false,
-            'template-only-glimmer-components': false
-          })
-        },
-        npm: {
-          ember: {
-            edition: 'classic'
-          }
-        }
       }
+      // The 'ember-classic' scenario was removed: the Ember Classic edition
+      // was removed from Ember itself, so the scenario can never pass on a
+      // modern Ember version. See deprecations.emberjs.com/v3.x/#toc_editions-classic
     ]
   };
 };
