@@ -1,11 +1,8 @@
 /* eslint-env node */
 'use strict';
 
-const EOL = require('os').EOL;
-const chalk = require('chalk');
-const fs = require('fs-extra');
-const Promise = require('rsvp');
-const readFile = Promise.denodeify(fs.readFile);
+const { promisify } = require('util');
+const readFile = promisify(require('fs').readFile);
 
 module.exports = {
   description: 'Sets up Raygun for your Ember CLI project',
@@ -36,14 +33,12 @@ module.exports = {
         return this.insertIntoFile('config/environment.js', config, { after: `environment,\n` });
       })
       .then(() => {
-        this.ui.writeLine(
-          EOL +
-          chalk.green('********************************************************') + EOL +
-          chalk.blue('Raygun') + ' has been installed.' + EOL +
-          'Please set your API Key in ' + chalk.green('config/environment.js') + '.' + EOL +
-          'If you don\'t have a key, get one at https://raygun.com!' + EOL +
-          chalk.green('********************************************************') + EOL
-        );
+        this.ui.writeLine('');
+        this.ui.writeLine('********************************************************', 'green');
+        this.ui.writeLine('Raygun has been installed.', 'blue');
+        this.ui.writeLine('Please set your API Key in config/environment.js.');
+        this.ui.writeLine("If you don't have a key, get one at https://raygun.com!");
+        this.ui.writeLine('********************************************************', 'green');
       });
   },
 
