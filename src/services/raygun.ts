@@ -1,16 +1,13 @@
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
+import type { RaygunOptions, RaygunV2, RaygunV2UserDetails } from 'raygun4js';
+
 const PREFIX = 'ember-cli-raygun:';
 
-// Loose typing for the raygun4js global. The library accepts many command
-// strings with widely varying argument shapes; we don't try to enumerate
-// them here.
-type Rg4jsFn = (command: string, ...args: unknown[]) => unknown;
-
-function getRg4js(): Rg4jsFn | undefined {
+function getRg4js(): RaygunV2 | undefined {
   if (typeof window === 'undefined') return undefined;
-  const fn = (window as unknown as { rg4js?: Rg4jsFn }).rg4js;
+  const fn = window.rg4js;
   return typeof fn === 'function' ? fn : undefined;
 }
 
@@ -22,7 +19,7 @@ export default class RaygunService extends Service {
   @tracked private _apiKey: string | undefined;
   @tracked private _enableCrashReporting: boolean | undefined;
   @tracked private _enablePulse: boolean | undefined;
-  @tracked private _options: Record<string, unknown> | undefined;
+  @tracked private _options: RaygunOptions | undefined;
 
   get apiKey(): string | undefined {
     return this._apiKey;
@@ -34,7 +31,7 @@ export default class RaygunService extends Service {
       return;
     }
     this._apiKey = value;
-    rg4js('apiKey', value);
+    rg4js('apiKey', value ?? '');
   }
 
   get enableCrashReporting(): boolean | undefined {
@@ -47,7 +44,7 @@ export default class RaygunService extends Service {
       return;
     }
     this._enableCrashReporting = value;
-    rg4js('enableCrashReporting', value);
+    rg4js('enableCrashReporting', value ?? false);
   }
 
   get enablePulse(): boolean | undefined {
@@ -60,46 +57,50 @@ export default class RaygunService extends Service {
       return;
     }
     this._enablePulse = value;
-    rg4js('enablePulse', value);
+    rg4js('enablePulse', value ?? false);
   }
 
-  get options(): Record<string, unknown> | undefined {
+  get options(): RaygunOptions | undefined {
     return this._options;
   }
-  set options(value: Record<string, unknown> | undefined) {
+  set options(value: RaygunOptions | undefined) {
     const rg4js = getRg4js();
     if (!rg4js) {
       warn('Unable to set options, rg4js is not available.');
       return;
     }
     this._options = value;
-    rg4js('options', value);
+    rg4js('options', value ?? {});
   }
 
-  send(...args: unknown[]): unknown {
+  send(error: Error | { error: unknown }): void {
     const rg4js = getRg4js();
     if (!rg4js) {
       warn('Unable to send data, rg4js is not available.');
-      return null;
+      return;
     }
-    return rg4js('send', ...args);
+    rg4js('send', error);
   }
 
-  setUser(...args: unknown[]): unknown {
+  setUser(user: RaygunV2UserDetails): void {
     const rg4js = getRg4js();
     if (!rg4js) {
       warn('Unable to set user, rg4js is not available.');
-      return null;
+      return;
     }
-    return rg4js('setUser', ...args);
+    rg4js('setUser', user);
   }
 
-  trackEvent(...args: unknown[]): unknown {
+  trackEvent(
+    event:
+      | { type: 'pageView'; path: string }
+      | { type: 'customTiming'; name: string; duration: number },
+  ): void {
     const rg4js = getRg4js();
     if (!rg4js) {
       warn('Unable to track event, rg4js is not available.');
-      return null;
+      return;
     }
-    return rg4js('trackEvent', ...args);
+    rg4js('trackEvent', event);
   }
 }

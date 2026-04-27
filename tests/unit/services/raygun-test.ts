@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 
 import type { RaygunService } from '#src/index.ts';
+import type { RaygunV2 } from 'raygun4js';
 
 interface RaygunCall {
   type: string;
@@ -17,9 +18,9 @@ module('Unit | Service | raygun', function (hooks) {
   hooks.beforeEach(function () {
     originalRg4js = window.rg4js;
     calls = [];
-    window.rg4js = (type: string, ...args: unknown[]) => {
+    window.rg4js = ((type: string, ...args: unknown[]) => {
       calls.push({ type, args });
-    };
+    }) as RaygunV2;
   });
 
   hooks.afterEach(function () {
@@ -96,14 +97,14 @@ module('Unit | Service | raygun', function (hooks) {
   test('falls back gracefully when rg4js is missing', function (assert) {
     window.rg4js = undefined;
     const service = this.owner.lookup('service:raygun') as RaygunService;
-    assert.strictEqual(service.send(new Error('x')), null);
-    assert.strictEqual(service.setUser({ identifier: 'a' }), null);
-    assert.strictEqual(service.trackEvent({ type: 'pageView' }), null);
+    service.send(new Error('x'));
+    service.setUser({ identifier: 'a' });
+    service.trackEvent({ type: 'pageView', path: '/x' });
     // Setters bail out without throwing and without storing the value.
     service.apiKey = 'IGNORED';
     service.enableCrashReporting = true;
     service.enablePulse = true;
-    service.options = { foo: 1 };
+    service.options = { allowInsecureSubmissions: true };
     assert.strictEqual(service.apiKey, undefined);
     assert.strictEqual(service.enableCrashReporting, undefined);
     assert.strictEqual(service.enablePulse, undefined);

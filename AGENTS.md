@@ -303,8 +303,10 @@ breaking-changes sections as needed.
   the README and let consumers paste it.
 - **Don't bypass the rg4js availability guards** — the addon must
   degrade gracefully when CSP/network blocks the CDN.
-- **Don't import `raygun4js` as an npm dependency** to "fix" the global
-  — that's a deliberate design choice.
+- **Don't bundle `raygun4js` as a runtime dependency** — keep using the
+  CDN snippet so the loader can self-update. Importing types from
+  `@types/raygun4js` (a devDependency) is fine and is how `RaygunService`
+  / `setupRaygun` are typed.
 - **Don't add per-template imports back to `tests/test-helper.ts`** —
   the test app intentionally has no demo templates so the addon's tests
   pass on every Ember version in the compat matrix.

@@ -2,6 +2,7 @@ import RaygunService from './services/raygun.ts';
 
 import type ApplicationInstance from '@ember/application/instance';
 import type RouterService from '@ember/routing/router-service';
+import type { RaygunOptions } from 'raygun4js';
 
 type ApplicationInstanceWithOnError = ApplicationInstance & {
   onerror?: (error: Error) => void;
@@ -19,7 +20,7 @@ export interface RaygunConfig {
   /** Toggle Raygun Pulse (Real User Monitoring). Defaults to true. */
   enablePulse?: boolean;
   /** Forwarded to `rg4js('options', …)`. See raygun4js docs. */
-  options?: Record<string, unknown>;
+  options?: RaygunOptions;
   /**
    * Track route changes as Pulse `pageView` events. Defaults to true.
    * Set false to opt out (or to wire your own analytics layer).
@@ -92,7 +93,7 @@ export function setupRaygun(
       router.on('routeDidChange', (transition) => {
         raygunService.trackEvent({
           type: 'pageView',
-          path: transition.to?.name,
+          path: transition.to?.name ?? '',
         });
       });
     }
