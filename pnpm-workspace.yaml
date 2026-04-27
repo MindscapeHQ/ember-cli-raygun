@@ -1,0 +1,6 @@
+packages:
+  - .
+
+autoInstallPeers: false
+resolvePeersFromWorkspaceRoot: false
+verifyDepsBeforeRun: install

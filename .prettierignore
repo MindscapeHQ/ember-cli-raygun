@@ -1,0 +1,12 @@
+# compiled output
+/dist/
+/dist-*/
+/declarations/
+
+# misc
+/coverage/
+pnpm-lock.yaml
+*.yaml
+*.yml
+*.md
+*.html

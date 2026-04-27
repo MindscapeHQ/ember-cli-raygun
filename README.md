@@ -1,134 +1,238 @@
-# Ember CLI Raygun
-[![Build Status](https://travis-ci.org/MindscapeHQ/ember-cli-raygun.svg?branch=master)](https://travis-ci.org/MindscapeHQ/ember-cli-raygun)
+# ember-cli-raygun
+
 [![Ember Observer Score](http://emberobserver.com/badges/ember-cli-raygun.svg)](http://emberobserver.com/addons/ember-cli-raygun)
 
-This addon will allow you to report errors to [Raygun](https://raygun.com) from your Ember CLI app using [raygun4js](https://github.com/MindscapeHQ/raygun4js).
+A [Raygun](https://raygun.com) crash-reporting + Pulse RUM integration for
+Ember.js applications, wrapping the
+[raygun4js](https://github.com/MindscapeHQ/raygun4js) browser library.
 
-:heart: Please [open an issue](https://github.com/MindscapeHQ/ember-cli-raygun/issues/new) if you run into any troubles!
+> **v3.0.0** ships as a [v2 Ember addon](https://github.com/embroider-build/embroider/blob/main/docs/v2-faq.md).
+> If you're upgrading from v2.x, see the [migration guide](#migrating-from-v2x) below.
 
 ---
 
-## CLI installation
+## Installation
 
 ```bash
-$ ember install ember-cli-raygun --api_key='paste_your_api_key_here'
+pnpm add -D ember-cli-raygun
+# or
+npm install --save-dev ember-cli-raygun
 ```
 
-Alternatively, you can set your API key manually by starting with:
+> v2-format addons do not run `ember install` blueprints. The two
+> install steps that the old blueprint did for you (config snippet +
+> initializer) are now manual — see below.
 
-```bash
-$ ember install ember-cli-raygun
+## Configuration
+
+### 1. Add the raygun4js loader to your app's `index.html`
+
+v2-format addons can't inject `<script>` tags into the host app's HTML
+at build time — modern Ember apps own their `index.html`/`app/index.html`
+outright. Paste the official Raygun loader into your `<head>` so it can
+catch errors from the very first tick of execution:
+
+```html
+<!-- app/index.html (or index.html for Vite-driven apps) -->
+<script type="text/javascript">
+  !(function (a, b, c, d, e, f, g, h) {
+    (a.RaygunObject = e),
+      (a[e] =
+        a[e] ||
+        function () {
+          (a[e].o = a[e].o || []).push(arguments);
+        }),
+      (f = b.createElement(c)),
+      (g = b.getElementsByTagName(c)[0]),
+      (f.async = 1),
+      (f.src = d),
+      g.parentNode.insertBefore(f, g),
+      (h = a.onerror),
+      (a.onerror = function (b, c, d, f, g) {
+        h && h(b, c, d, f, g),
+          g || (g = new Error(b)),
+          (a[e].q = a[e].q || []),
+          a[e].q.push({ e: g });
+      });
+  })(
+    window,
+    document,
+    'script',
+    'https://cdn.raygun.io/raygun4js/raygun.min.js',
+    'rg4js',
+  );
+</script>
 ```
 
-Next, set your API key in `config/environment.js`:
+If you'd rather skip Raygun entirely in development, wrap the snippet in
+an `{{#if}}` (classic builds) or just omit it from the dev `index.html`.
+The runtime degrades gracefully — every service call no-ops with a
+`console.warn` when `window.rg4js` is absent.
+
+### 2. Add your config to `config/environment.js`
 
 ```js
-var ENV = {
-  // ...
-  raygun: {
-    apiKey:  "paste_your_api_key_here",
-    enableCrashReporting: (environment === "production")
-  }
-  // ...
+module.exports = function (environment) {
+  const ENV = {
+    /* ... */
+    raygun: {
+      apiKey: 'paste_your_api_key_here',
+      enableCrashReporting: environment === 'production',
+      enablePulse: true,
+      // options: { allowInsecureSubmissions: true },
+    },
+  };
+  return ENV;
+};
 ```
 
-*The default blueprint (which runs during ember install ember-cli-raygun) will add the above config in your app's config/environment.js file.*
+### 3. Wire up the runtime (replaces the deprecated instance-initializer)
 
-## Release
+In v2.x the addon shipped an instance-initializer that automatically
+called into raygun4js after boot. **Instance initializers are deprecated
+in modern Ember**, so v3 removes ours and exposes a `setupRaygun()`
+function that you call yourself. Pick whichever spot fits your app:
 
-Raygun will now track errors in your deployed application. By default, Ember CLI Raygun is disabled unless your environment is set to "production". You can configure this behavior in `config/environment.js`.
+#### Option A — your own instance-initializer (recommended, minimal diff)
 
-# Additional Configruation
+`setupRaygun` needs an `ApplicationInstance` (so it can `lookup` the
+service and the router), so the most natural place to call it is from a
+host-owned instance-initializer. This is also the smallest possible
+diff if you're upgrading from v2.x.
 
-## CORS
+```js
+// app/instance-initializers/raygun.js
+import config from 'my-app/config/environment';
+import { setupRaygun } from 'ember-cli-raygun';
 
-`ember-cli-raygun` will automatically inject the [raygun4js](https://github.com/MindscapeHQ/raygun4js) bootstrap script into the head of your Ember app. This is the most reliable way to catch errors (even during app initialization).
+export function initialize(appInstance) {
+  setupRaygun(appInstance, config.raygun);
+}
 
-If you’re using CORS without `unsafe-inline`, you’ll need to add the following directives to ensure `rg4js` and Raygun load correctly:
+export default { initialize };
+```
 
-* `script-src`
-  - 'sha256-kOJzCjwwBHVC6EAEX5M+ovfu9sE7JG0G9LcYssttn6I='
-  - 'http://cdn.raygun.io'
+#### Option B — register the initializer inline in `app/app.js`
 
-* `connect-src`
-  - https://api.raygun.io
+If you'd rather not add a separate file, register it directly on the
+`Application` class:
 
-### Accessing Raygun
+```js
+// app/app.js
+import Application from '@ember/application';
+import Resolver from 'ember-resolver';
+import loadInitializers from 'ember-load-initializers';
+import config from 'my-app/config/environment';
+import { setupRaygun } from 'ember-cli-raygun';
 
-Functions you might need on `rg4js` are exposed as an [Ember Service](https://guides.emberjs.com/release/tutorial/part-2/service-injection/), for instance tracking custom events:
+export default class App extends Application {
+  modulePrefix = config.modulePrefix;
+  podModulePrefix = config.podModulePrefix;
+  Resolver = Resolver;
+}
+
+App.instanceInitializer({
+  name: 'raygun',
+  initialize(appInstance) {
+    setupRaygun(appInstance, config.raygun);
+  },
+});
+
+loadInitializers(App, config.modulePrefix);
+```
+
+> Don't be tempted to call `setupRaygun(this, …)` from
+> `Application#ready()` — `this` is the `Application`, not an
+> `ApplicationInstance`, and it has no `lookup` method.
+
+`setupRaygun` is a no-op when `config.raygun.enableCrashReporting` is
+false, so it's safe to call unconditionally.
+
+## Using the service
+
+Inject `service:raygun` anywhere you need it:
 
 ```js
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
+import { service } from '@ember/service';
 
-export default class IndexRoute extends Route {
+export default class ApplicationRoute extends Route {
   @service raygun;
 
   beforeModel() {
+    this.raygun.setUser({
+      identifier: 'user-123',
+      isAnonymous: false,
+      email: 'a@b.com',
+      fullName: 'Ada Lovelace',
+    });
+
     this.raygun.trackEvent({
       type: 'customTiming',
       name: 'IndexRouteBeforeModel',
-      duration: 1200
-    })
+      duration: 1200,
+    });
+
+    this.raygun.send(new Error('manual report'));
   }
 }
 ```
 
-## User Tracking
+Every method guards against `rg4js` being unavailable (e.g. blocked by
+CSP or network) and `console.warn`s instead of throwing.
 
-Check out the [Customers](https://github.com/MindscapeHQ/raygun4js#customers) section in the raygun4js documentation for full details.
+## Content Security Policy
 
-Add the following snippet into your application route in `app/routes/application.js`:
+If your app uses CSP without `unsafe-inline`, allow the inline loader
+script and the Raygun CDN/API:
 
-```js
-// ...
-  @service user;
-  @service raygun;
+* `script-src`
+  * `'sha256-kOJzCjwwBHVC6EAEX5M+ovfu9sE7JG0G9LcYssttn6I='`
+  * `https://cdn.raygun.io`
+* `connect-src`
+  * `https://api.raygun.io`
 
-  beforeModel: () {
-    this.setRaygunUser();
-  },
+## Migrating from v2.x
 
-  setRaygunUser: () {
-    this.raygun.setUser({
-      identifier: this.get("user.id"),
-      isAnonymous: false,
-      email: this.get("user.email"),
-      firstName: this.get("user.firstName"),
-      fullName: this.get("user.fullName")
-    });    
-  },
-// ...
+| v2.x                                       | v3.x                                                                                                      |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
+| `ember install ember-cli-raygun`           | `pnpm add -D ember-cli-raygun` + manual config                                                            |
+| Loader injected by `contentFor('head')`    | Paste the loader `<script>` into your `index.html` yourself (see step 1)                                  |
+| Auto instance-initializer                  | Call `setupRaygun(appInstance, config.raygun)`                                                            |
+| `ENV.raygun.options` silently ignored      | Forwarded to `rg4js('options', …)`                                                                        |
+| `enablePulse` always on                    | Configurable via `ENV.raygun.enablePulse`                                                                 |
+| Page-view path was the route name          | Still the route name (override with `trackPageViews: false` and wire your own analytics if you want URLs) |
+| Loader script used `//cdn.raygun.io`       | Uses `https://cdn.raygun.io`                                                                              |
+| Service in `addon/services/raygun.js` (JS) | `src/services/raygun.ts` (TypeScript)                                                                     |
+
+The public service API (`apiKey`, `enableCrashReporting`, `enablePulse`,
+`options`, `send`, `setUser`, `trackEvent`) is unchanged.
+
+## Development
+
+This is a single-package v2 addon — `src/` holds the addon, `demo-app/`
+is the playground, `tests/` runs against `demo-app/`.
+
+```bash
+pnpm install
+pnpm start          # vite dev server with the demo app
+pnpm test           # build + run the qunit test suite
+pnpm lint           # eslint + ember-template-lint + prettier + tsc
+pnpm build          # rollup build → dist/
 ```
 
-## Thanks! :heart:
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for more.
 
-Thanks to:
+## Thanks ❤
 
-  * [@aklkv](https://github.com/aklkv)
-  * [@jakesjews](https://github.com/jakesjews)
-  * [@jrjamespdx](https://github.com/jrjamespdx)
-  * [@fundead](https://github.com/fundead)
-  * [@JonathanPrince](https://github.com/JonathanPrince)
-  * [@j5alive](https://github.com/j5alive)
-  * [@josephambe](https://github.com/josephambe)
-  * [@pixelhandler](https://github.com/pixelhandler)
-  * [@archit](https://github.com/archit)
-  * [@cibernox](https://github.com/cibernox)
-  * [@dwnz](https://github.com/dwnz)
-
-For your contributions on the previous version of this addon :) 
-
-## Contributing
-
-Pull requests are welcome!
-
-* `git clone` this repository
-* `npm install`
-
-## Running tests
-
-* `ember test` OR
-* `ember test --server`
-
-There’s a detailed test harness in the `dummy` app so please check that your changes work end-to-end by running that.
+* [@aklkv](https://github.com/aklkv)
+* [@jakesjews](https://github.com/jakesjews)
+* [@jrjamespdx](https://github.com/jrjamespdx)
+* [@fundead](https://github.com/fundead)
+* [@JonathanPrince](https://github.com/JonathanPrince)
+* [@j5alive](https://github.com/j5alive)
+* [@josephambe](https://github.com/josephambe)
+* [@pixelhandler](https://github.com/pixelhandler)
+* [@archit](https://github.com/archit)
+* [@cibernox](https://github.com/cibernox)
+* [@dwnz](https://github.com/dwnz)

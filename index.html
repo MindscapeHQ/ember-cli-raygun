@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>ember-cli-raygun demo</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="./demo-app/styles.css" />
+    <!--
+      Demo only: load raygun4js by hand. v2-format addons can't inject
+      into the host's <head>, so consumer apps paste this same snippet
+      into their own index.html (see the README "Configuration" step 1).
+    -->
+    <script type="text/javascript">
+      !(function (a, b, c, d, e, f, g, h) {
+        (a.RaygunObject = e),
+          (a[e] =
+            a[e] ||
+            function () {
+              (a[e].o = a[e].o || []).push(arguments);
+            }),
+          (f = b.createElement(c)),
+          (g = b.getElementsByTagName(c)[0]),
+          (f.async = 1),
+          (f.src = d),
+          g.parentNode.insertBefore(f, g),
+          (h = a.onerror),
+          (a.onerror = function (b, c, d, f, g) {
+            h && h(b, c, d, f, g),
+              g || (g = new Error(b)),
+              (a[e].q = a[e].q || []),
+              a[e].q.push({ e: g });
+          });
+      })(
+        window,
+        document,
+        'script',
+        'https://cdn.raygun.io/raygun4js/raygun.min.js',
+        'rg4js',
+      );
+    </script>
+  </head>
+  <body>
+    <script type="module">
+      import { App } from './demo-app/app';
+      App.create({});
+    </script>
+  </body>
+</html>
