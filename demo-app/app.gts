@@ -5,10 +5,6 @@ import { RaygunService, setupRaygun } from '#src/index.ts';
 
 import type ApplicationInstance from '@ember/application/instance';
 
-import ApplicationTemplate from './templates/application.gts';
-import ErrorMakerTemplate from './templates/error-maker.gts';
-import OtherOneTemplate from './templates/other-one.gts';
-
 class Router extends EmberRouter {
   location = 'history';
   rootURL = '/';
@@ -24,9 +20,7 @@ export class App extends EmberApp {
     './router': { default: Router },
     './services/page-title': { default: PageTitleService },
     './services/raygun': { default: RaygunService },
-    './templates/application': { default: ApplicationTemplate as unknown },
-    './templates/error-maker': { default: ErrorMakerTemplate as unknown },
-    './templates/other-one': { default: OtherOneTemplate as unknown },
+    ...import.meta.glob('./templates/**/*', { eager: true }),
   };
 }
 
